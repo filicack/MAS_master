@@ -1,0 +1,102 @@
+%\section[Naslov sekcije u sadržaju][Kratki naslov sekcije]{Naslov sekcije}
+\chapter[Uvod u teoriju Multiagentnih sustava][MAS]{Uvod u teoriju Multiagentnih sustava}
+\section[Općenito o Multiagentnim sustavima][Općenito o Multiagentnim sustavima]{Općenito o Multiagentnim sustavima}
+\subsection{Općenito}
+\section[MAS na neusmjerenom grafu][MAS na neusmjerenom grafu]{MAS na neusmjerenom grafu}
+Želimo istražiti računanje $H_\infty$ norme MAS ovisno o poemećaju koji se izvrši na jednog agenta ili na skupinu agenata.
+U članku \cite{nakic2022short} multiagentni sustav je modeliran kao neusmjereni težinski graf gdje je svaki vrh/agent linearna obična diferencijalna jednadžba drugog reda. Općenito je računanje $H_\infty$ norme MAS-a numerički izuzetno zahtjevno. Uzimajući u obzir strukturu funkcije prijenosa MAS-a može se pokazati da se $H_\infty$ za veliku klasu MAS-a postiže u nuli što bitno pojednostavljuje računanje $H_\infty$ norme te ga proširuje na sustave puno većih dimenzija. 
+
+\subsection{Struktura MAS-a}
+Neka je zadano $n$ agenata
+\begin{equation}
+    \ddot{\chi} = -T_s\dot{\chi} + K_s u_i + \eta_i \omega_i, \qquad T_s, K_s >0
+    \label{eq:MAS_ODJ}
+\end{equation} gdje su, $\chi_i, u_i$ i $\omega_i$ skalarne funkcije, a $\eta_i$ je faktor smetnje.\\
+Funkcija $\chi_i$ predstavlja stanje sustava, $u_i$ predstavlja ulaz, a $\omega_i$ predstavlja izvanjsku smetnju $i$-tog agenta, $i \in \{1,\dots, n\}$.\\
+Dinamika agenata \eqref{eq:MAS_ODJ} predstavlja realni dvostruki integrator. Ova dinamika omogućuje posebnije rezultate koje su prikazali u \cite{nakic2022short}.
+Široko prihvačen decentraliziran izlazna povratna sprega (eng. output-feedback) koji omogućuje sinkronizaciju mreže je dana u (Ren and Beard (2008 \cite{nakic2022short}) sa:
+\begin{equation}
+    u_i = -K\hat{C}\sum\limits_{j \in \mathcal{N}_j} w_{ij} \left(\:
+    \begin{bmatrix}
+        \chi_i \\ \dot\chi_i
+    \end{bmatrix}- 
+    \begin{bmatrix}
+        \chi_j \\ \dot\chi_j
+    \end{bmatrix}\right)\:
+    \label{eq:feedback}
+\end{equation}
+gdje su $K>0$ i $\hat{C} = \begin{bmatrix}c_1 & c_2\end{bmatrix}$ sa $c_1, c_2>0$.
+Prirodna pretpostavka je da je pripadni neusmjereni graf povezan. Ako nije povezan, može se rastaviti na $k$ samostalnih MAS-a, gdje $k$ označava komponentu povezanosti.
+
+Autori u \cite{nakic2022short} pretpostavljaju da smetnje $\omega_i$ ne moraju sve biti nezavisne, stoga u skupu svih smetnji $\{\omega_1, \dots, \omega_n\}$ pretpostavljaju da ih je $ k \in \{1,\dots,n\}$ različitih $\{\omega_{i_1}, \dots, \omega_{i_n}\}$. Tada je $ \begin{bmatrix}\omega_1, \dots, \omega_n\end{bmatrix}^T = H \begin{bmatrix}\omega_{i_1}, \dots, \omega_{i_n}\end{bmatrix}^T$ gdje je $H \in M_{nk}$ dana s 
+\begin{equation*}
+    H_{jr} = 
+    \begin{cases}
+        1, & \omega_j = \omega_{i_r} \\
+        0, & \text{inače}
+    \end{cases}, j=1, \dots ,n, \quad r = 1,\dots, k.
+\end{equation*}
+Sa $E = diag(\eta_1,\dots , \eta_n)H \in M_{nk}$ se označi matrica smetnji. Pretpostavlja se da je $\eta_i \neq 0 \text{ ako } H_{ii} \neq 0$ tj. ako se izvrši smetnja $i$-tog agenta, onda pripadna težina nije nula. Iz toga slijedi da je matrica $E$ punog ranga.
+
+Ako se iskoristi da je $L$ Laplaceova matrica neusmjerenog grafa koji pripada MAS-u dinamika zatvorene petlje \eqref{eq:MAS_ODJ} i \eqref{eq:feedback} postaje
+\begin{equation}
+    \ddot{\chi} + ( \underbrace{T_s}_{:= \beta} I_n + L \underbrace{K_sKc_2}_{:= \alpha} )\dot{\chi} + L \underbrace{K_sKc_1}_{:= \gamma} \chi = E\omega,
+    \label{eq:cijeli sustav}
+\end{equation}
+pritom su $\chi = \left(\chi_1, \dots, \chi_n\right)^T$ i $\omega = \left(\omega_{i_1}, \dots, \omega_{i_n}\right)^T$.
+
+\subsection{Funkcija prijenosa MAS-a}
+U prvom koraku cilj je doći do formule za funkciju prijenosa $F(s)= \tilde{C}(is - \tilde{A})^{-1}\tilde{B}$. Pokaže se da je ona oblika:
+\begin{align}
+    F(0) = \frac{1}{\gamma}L^{+}E, \qquad s=0\\
+    F(s) = \frac{1}{\gamma+is\alpha}V V^T (L- qmu(s) I_n)^{-1}E, \qquad s \neq 0
+\end{align} pritom su $L^{+}$ Moore-Penroseov pseudoinverz od L i funkcija
+$$\mu(s)=\frac{is\beta -s^2}{is \alpha + \gamma} $$
+
+\subsection{Ključan rezultat}
+Glavni rezultat je dan u teoremu:
+\begin{thm}
+    Neka je $\gamma \leq \alpha \beta$ ili ($\gamma > \alpha \beta$ i $||L||\leq \frac{\beta^2}{2(\gamma-\alpha \beta)}$). Tada je
+    $$||F||_\infty = {\overline\sigma}(F(0))$$.
+\end{thm}
+
+\begin{rem}
+    U slučaju da ne vrijedi neki od uvjeta lako se dobiva MAS takav da
+    $$||F||_\infty \neq {\overline\sigma}(F(0))$$.
+    \textbf{Ubaci neki graf gdje se to vidi.}
+\end{rem}
+
+
+\section[MAS na usmjerenom grafu][MAS na usmjerenom grafu]{MAS na usmjerenom grafu}
+
+
+
+\section[MAS numerička implementacija][MAS numerička implementacija]{MAS numerička implementacija}
+ $\alpha, \beta, \gamma$
+output. funkcija ovisna o parametru $s$:  $$\mu(s)=\frac{is\beta -s^2}{is \alpha + \gamma} $$Računamo 
+vrijednost funkcije $F_i(s)$:
+\begin{align*}
+         F_i(s)  & = \frac{1}{is\alpha + \gamma}VV^T(L-\mu(s)I)^{-1}e_i \\
+         & = \left[\: L = ZTZ^T \: \right]\\
+         & = \frac{1}{is\alpha + \gamma}VV^TZ(T-\mu(s)I)^{-1}Z^*e_i  \\
+         & = \left[ \: VV^TZ = VV^T[\:W \:\: V \:] = V \left[\:0 \: \: I\: \right]  \right] \\
+         & = \frac{1}{is\alpha + \gamma}\left[\:0_{n×k} \:\: V \:\right](T-\mu(s)I)^{-1}Z^*e_i\\
+         & = \left[\: Z^*e_i = [Z_0 Z_1]^T, \: \: Z_0 \in M_{k,1}, Z_1 \in M_{n-k,1}\: \right]\\
+         & = \frac{1}{is\alpha + \gamma} V (T_{22} - \mu(s)I)^{-1} Z_1
+\end{align*}
+Za $L$ koristimo Schurovu dekompoziciju za $L= ZTZ^T$, $Z= [\: W\:\: V\:],$ $ \: W \in M_{n,k},$ $ \: V \in M_{n,n-k},$ gdje su V stupci od $Z$ koji pripadaju ne-nul elementima i dolazimo do oblika za $\Phi$ (jer vrijedi $L = L V V^T$):
+
+$$\Phi(s) = \left(is \alpha + \gamma \right)\left(\frac{is\beta -s^2}{is \alpha + \gamma}I +L\right) = \\ =  (is \alpha + \gamma)\left(L - \mu(s)I\right),$$
+gdje je $\mu(s) =\frac{is\beta -s^2}{is \alpha + \gamma} $.
+
+Za vrijednost u $0$:
+$$F_i(0) = \frac{1}{\gamma}V(V^TLV)^{-1}V^Te_i,$$ iskoristi se Schur za L i def za V pa se dobije
+$$F_i(0) = \frac{1}{\gamma}VT_{22}^{-1}V^Te_i, $$
+gdje je $$ T = 
+\begin{bmatrix}
+  T_{11} & T_{12}\\
+  0 & T_{22}
+  \end{bmatrix}.
+$$ Pritom blok matrica $T_{11} \in M_{k,k}$ na dijagonali ima $0$, a $T_{22} \in M_{n-k,n-k}$ ima ne-nul svojstvene vrijednosti.
+
+

@@ -1,0 +1,219 @@
+
+%\section[Naslov sekcije u sadržaju][Kratki naslov sekcije]{Naslov sekcije}
+\chapter[Uvod u Teoriju upravljanja][UuTU]{Uvod u Teoriju upravljanja}
+\section[Vremenski invarijantni sustavi u prostoru stanja][Vremenski invarijantni sustavi u prostoru stanja]{Vremenski invarijantni sustavi u prostoru stanja}
+%\subsection{... u prostoru stanja}
+\begin{defn}
+    Sustav običnih diferencijalnih jednadžbi oblika
+    \begin{equation}
+        \begin{aligned}
+            \dot{x}(t) & = A x(t) + B u(t)\\
+            y(t) & = C x(t) + D u(t)\\
+            x(0) &= x_0\\
+        \end{aligned}
+        \qquad
+        \begin{aligned}
+            &x(t) \in \R^n, & u(t) \in \R^m,& \quad y(t) \in \R^p\\
+            &A \in M_n, & B \in M_{nm}&\\
+            &C \in M_{pn}, & D \in M_{pm}&\\
+        \end{aligned}
+        \label{eq:LTI}
+    \end{equation}
+    nazivamo \textbf{vremenski invarijantni sustavi (LTI)} zapisan u prostoru stanja.\\
+    Funkciju $u$ nazivamo ulaz, a vektor $y$ nazivamo izlaz.
+\end{defn}
+\begin{rem}
+    Sustav je linearan. Naime,
+    \begin{equation*}
+        \begin{rcases}
+            u_1 \dipath y_1 \\
+            u_2 \dipath y_2 
+        \end{rcases}
+        \Rightarrow
+        u = \alpha_1 u_1 + \alpha_2 u_2 \dipath y = \alpha_1 y_1 + \alpha_2 y_2.
+    \end{equation*}
+    Sustav je vremenski invarijantan jer vrijedi: 
+    \begin{equation*}
+            \begin{rcases}
+            \tilde{u}(t) &:= u(t-T)\\
+            \tilde{x}(0) &:= x(T) \\ 
+        \end{rcases}
+        \Rightarrow
+        \tilde{y}(t) = y(t-T)
+    \end{equation*}
+\end{rem}
+\begin{rem}
+    Sustav \eqref{eq:LTI} je linearni sustav diferencijalnih jednadžbi prvog reda s početnim uvjetom pa rješenje postoji i jedinstveno je. Vidi (\cite{ODJ})
+\end{rem}
+\begin{rem}
+    Općenito LTI sustav \eqref{eq:LTI} označavamo kao $G = (A,B,C,D)$ ili kao 
+    $G = \begin{bmatrix}
+        \begin{array}{c|c}
+           A & B \\
+          \hline
+          C & D
+        \end{array}
+    \end{bmatrix}$.
+\end{rem}
+\begin{defn}
+    Za kvadratnu matricu $A \in M_n$ definiramo matričnu eksponencijalnu funkciju sa:
+    $$e^A = \sum \limits_{k = 0}^{\infty} \frac{1}{k!} A^k$$
+\end{defn}
+\begin{prop}
+    Za autonomni sustav ($u = 0$) :
+    \begin{equation}
+        \begin{cases}
+            \dot{x}(t) = Ax(t),\\
+            x(0) = x_0
+        \end{cases}
+        \label{eq:Axt}
+    \end{equation}
+    rješenje je dano s $x(t) = e^{At}x_0, \: t \geq 0.$
+\end{prop}
+\begin{defn}
+    Sustav \begin{equation*}
+        \begin{cases}
+            \dot{x}(t) = Ax(t),\\
+            x(0) = x_0
+        \end{cases}
+    \end{equation*} je \textbf{interno stabilan} ako za sve $x_0 \in \R^n$ vrijedi $\lim_{t \to \infty}x(t)=0$.
+\end{defn}
+\begin{prop}
+    Sustav \eqref{eq:Axt} je interno stabilan ako i samo ako $\mathfrak{Re}(\lambda) \geq 0$ za sve svojstvene vrijednosti od matrice $A$.
+\end{prop}
+
+\begin{defn}
+    kažemo da je matrica $A \in M_n$  \textbf{Hurwitzova} ako je $\mathfrak{Re}(\lambda) \geq 0$ za sve svojstvene vrijednosti od matrice $A$. $\Re(\lambda)$ označava realni dio kompleksnog broja $\lambda$.
+\end{defn}
+
+\begin{prop}
+    Rješenje sustava ODJ
+    \begin{equation*}
+        \begin{cases}
+            \dot{x}(t) = Ax(t),\\
+            x(0) = x_0
+        \end{cases}
+    \end{equation*} je dano sa
+    \begin{equation}
+        x(t) = e^{At}x_0 + \int\limits_0^t e^{A(t-\tau)}Bu(\tau) d\tau, \qquad t \geq 0.
+        \label{eq:rjLTI}
+    \end{equation}
+\end{prop}
+
+\begin{rem}
+    Primjenimo rješenje \eqref{eq:rjLTI} na preslikavanje $u \mapsto y $
+    \begin{align}
+        y(t) &= C x(t) + D u(t) \\
+             &= e^{At}x_0 + \int_0^t e^{A(t-\tau)}Bu(\tau) d\tau + D u(t)\\
+             &= e^{At}x_0 + (g \ast u)(t) +  D u(t).
+             \label{eq:MAPuy}
+    \end{align} Pritom smo uveli oznaku $g(t)= C e^{At}B$ .    
+\end{rem}
+
+\section[Frekvencijska domena][Frekvencijska domena]{Frekvencijska domena}
+\subsection{Funkcija transfera}
+
+\begin{defn}
+    \textbf{Laplaceova transformacija} funkcije $ f: \left[0, +\infty \right> \to \R^l$ je 
+    $$\mathcal{L}(f)(s) = \hat{f}(s) = \int_0^{+\infty}f(\tau) e^{-s \tau}d\tau$$.
+\end{defn}
+\begin{rem}
+    Općenito kod ovakve definicije ostaje pitanje konačnosti integrala iz definicije. Ovdje se uzima da je domena od $\hat{f}$ skup svih $s \in \C$ za koje integral konvergira. Tamo gdje divergira, stavi se nula.
+\end{rem}
+
+\begin{exa}
+    Kada na sustav \eqref{eq:LTI} djelujemo sa Laplaceovom transformacijom dobivamo:
+    \begin{equation*}
+        \begin{rcases}
+            s \hat{x}(s) &= A\:\hat{x}(s) + B \: \hat{u}(s)\\
+            \hat{y}(s) &= C\:\hat{x}(s) + D\:\hat{u}(s)
+        \end{rcases}
+        \quad \Rightarrow \quad
+        \begin{cases}
+            \hat{x}(s) = \left(sI - A\right)^{-1}B\:\hat{u}(s)\\
+            \hat{y}(s) = \left(C\left(sI - A\right)^{-1}B + D\right)\hat{u}(s)
+        \end{cases}.
+    \end{equation*}
+        Pritom preslikavanje $u \mapsto y $ možemo označiti sa $\hat{y}(s) = \hat{G}(s)\hat{u}(s)$.
+\end{exa}
+\begin{defn}
+    Za sustav $G = \begin{bmatrix}
+        \begin{array}{c|c}
+           A & B \\
+          \hline
+          C & D
+        \end{array}
+    \end{bmatrix}$
+    definiramo pripadnu \textbf{funkciju prijenosa} kao
+    \begin{equation}
+        \hat{G}(s) = \left(C\left(sI - A\right)^{-1}B + D\right)
+    \end{equation}
+\end{defn}
+\begin{rem}
+    Uočimo da primjenom Laplaceove tranfsormacije na izraz \eqref{eq:MAPuy} možemo i alternativno doći do formule $\hat{y}(s) = \hat{g}(s) \: \hat{u}(s) + D\:\hat{u}(s)= \left(C\left(sI - A\right)^{-1}B + D\right)\hat{u}(s) = \hat{G}(s)\hat{u}(s)$. Naime, uzmemo $x(0) = 0$ pa zbog $\hat{g}(s) = \mathcal{L}(C e^{At}B)(s) = C\left(sI - A\right)^{-1}B$ dobivamo isti izraz.
+\end{rem}
+
+\subsection{Prostor $\mathcal{H}_\infty$}
+Želimo doći do definicije prostora$\mathcal{H}_\infty$.\\
+Općenito, nije od značajnog interesa promatrati rješenje $y$ za neki specifični ulazni signal $u$. Značajnije je promatrati samo preslikavanje $u \mapsto y$ te promatrati kako se ponaša $y$ za cijelu neku klasu ulaza $u$.\\
+Jedan od načina proučavanja preslikavanja $u \mapsto y$ je mjerenje $H_\infty$ norme sustava $G = \begin{bmatrix}
+        \begin{array}{c|c}
+           A & B \\
+          \hline
+          C & D
+        \end{array}
+    \end{bmatrix}$.
+
+\mycomment{
+Općenito za funkcije ulaza(inputa) uzimamo funkcije $u \in L_2(\R),\: u: \R \to \C^m$.
+Prostor $L_2(\R)$ je Hilbertov prostor sa skalarnim produktom 
+$\left< u,v \right> = \int_{-\infty}^{+\infty}u^*(t)v(t) dt$.
+\begin{rem}
+    Do sada su ulazi/ulazni signali bili sa domenom $\left[0, +\infty \right>$, a sada smiju biti i $\left< -\infty,+\infty\right>$.
+\end{rem}
+\begin{defn}
+    \textbf{Fourierova transformacija} funkcije $ u: \left< -\infty, +\infty \right> \to \C^m$ je 
+    $$\Phi(u)(i\omega) = \hat{u}(i \omega) = \int_{-\infty}^{+\infty}u(t) e^{-i \omega t}dt$$.
+\end{defn}
+\begin{rem}
+    Ovdje gledamo prostor $L_2(i\R)$ sa pridruženim skalarnim produktom: 
+    $\left< u,v \right> = \frac{1}{2 \pi}\int_{-\infty}^{+\infty}u^*(i\omega)v(i\omega) d\omega$.
+    $L_2(i\R)$ je Hilbertov prostor.
+\end{rem}
+}
+\begin{defn}
+    Za funkcije $G$ u prostoru:
+    \begin{equation*}
+        \mathcal{H}_\infty = \biggl\{ G: \C^{+} \to \C^{m \times l} \: : \: G \emph{ je analitička}, \: \sup\limits_{\lambda \in \C^{+}} {\overline\sigma}(G(\lambda)) \leq \infty \biggr\}
+    \end{equation*}
+    definiramo $H_\infty$ normu 
+    \begin{equation*}
+        ||G||_\infty = \sup\limits_{\lambda \in \C^{+}} {\overline\sigma}(G(\lambda)) = \sup\limits_{\omega \in \R} {\overline\sigma}(G(i\omega))
+    \end{equation*}
+    Pritom je $\C^{+} = \{\lambda \in \C \: : \: \mathfrak{Re}(\lambda) \geq 0\}$ te je ${\overline\sigma}(\cdot)$ najveća singularna vrijednost matrice.
+\end{defn}
+\begin{rem}
+    Može se pokazati da se jednakost u definiciji postiže upravo na imaginarnoj osi $\sup\limits_{\lambda \in \C^{+}} {\overline\sigma}(G(\lambda)) = \sup\limits_{\omega \in \R} {\overline\sigma}(G(i\omega))$.
+    \\
+    Općenito, izraz $G(i\omega)$ zovemo \textbf{frekvencijski odziv} sustava za frekvenciju $\omega$.
+\end{rem}
+
+Računanje $H_\infty$ je prilično zahtjevno. Jedan od rezultata pomoću kojih se računa $H_\infty$ norma je sljedeći:
+\begin{lem}
+    Neka je $\gamma >0$ i sustav $G = \begin{bmatrix}
+        \begin{array}{c|c}
+           A & B \\
+          \hline
+          C & D
+        \end{array}
+    \end{bmatrix}$ takav da matrica $A$ nema svojstvenih vrijednosti na imaginarnoj osi. \\
+    Tada je $||G||_\infty < \gamma$ ako i samo ako $\overline{\delta}(D) < \gamma$ i Hamiltonova matrica
+    \begin{equation*}
+        H = \begin{bmatrix}        
+           A + B R^{-1} D^* C & BR^{-1}B^* \\
+          -C^*(I + DR^{-1}D^*)C & -(A+BR^{-1}D^*C)^*
+    \end{bmatrix}
+    \end{equation*} nema svojstvenih vrijednosti na imaginarnoj osi. Pritom je $R = \gamma^2 - D^*D$.
+\end{lem}
+Ovaj rezultat otkriva pristup za računanje $H_\infty$ norme, naime pomoću metode bisekcije bi se teoretski mogla naći proizvoljno dobra aproksimacija $H_\infty$ norme. S druge strane zahtjev da matrica $H$ nema svojsvtenih vrijednosti na imaginarnoj osi treba pažljivo numerički provjeravati.
+
